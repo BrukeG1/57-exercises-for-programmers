@@ -1,3 +1,4 @@
+module Anagram24 where
 import Data.Char (isSpace)
 
 main :: IO ()
@@ -21,7 +22,8 @@ isAnagram xs ys =
     cleanys  = filter (not . isSpace) ys
 
 sameLength :: [a] -> [a] -> Bool
-sameLength xs ys = length xs == length ys
+sameLength xs ys =
+    length xs == length ys
 
 merge :: (a -> a -> Bool) -> [a] -> [a] -> [a]
 merge _ [] ys = ys
@@ -32,9 +34,11 @@ merge p xs@(x:xt) ys@(y:yt) | x `p` y = x : merge p xt ys
 split :: [a] -> ([a],[a])
 split (x:y:zs) =
     (x:xs,y:ys)
-  where (xs,ys) = split zs 
-split [x]      = ([x],[])
-split []       = ([],[])
+  where 
+    (xs,ys) = split zs
+
+split [x] = ([x],[])
+split []  = ([],[])
 
 mergeSort :: (a -> a -> Bool) -> [a] -> [a]
 mergeSort _ []  = []
