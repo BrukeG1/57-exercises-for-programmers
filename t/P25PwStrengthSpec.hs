@@ -96,3 +96,6 @@ spec = do
       manySpecials "pokey" `shouldBe` False
     it "is false when string is empty" $ do
       manySpecials "" `shouldBe` False
+  describe "strongPasswordMinLength" $ do
+    it "should be equal to 8" $ do
+      strongPasswordMinLength `shouldBe` 8
