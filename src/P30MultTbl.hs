@@ -14,8 +14,9 @@ format  = printf numTab
 
 table :: [(Int,Int,Int)] -> String
 table xs =
-    "    " ++ header ++ tbl
+     spaces ++ header ++ tbl
   where
+    spaces  = "    "
     header  = concatMap format [0 .. largest]
     largest = maximum xss
     xss     = map frst xs
