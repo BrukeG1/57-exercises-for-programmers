@@ -27,4 +27,3 @@ spec = do
   describe "popSD" $ do
     prop "is within 0.0000000001 of sqrt of variance from Statistics.Sample library (some rounding errors exist)" $
       \xs -> popSD xs - stdDevPop xs <0.0000000001
-
