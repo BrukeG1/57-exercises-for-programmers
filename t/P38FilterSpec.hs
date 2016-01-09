@@ -24,4 +24,10 @@ spec = do
       evn 3 `shouldBe` False
     prop "has the same behaviour as even from the prelude" $
           \x -> evn x == even x
-    
+  describe "od" $ do
+    it "identifies 3 as odd" $ do
+      od 3 `shouldBe` True
+    it "identifies 2 as not odd" $ do
+      od 2 `shouldBe` False
+    prop "has the same behaviour as odd from the prelude" $
+          \x -> od x == odd x
