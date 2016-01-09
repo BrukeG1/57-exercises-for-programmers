@@ -1,5 +1,18 @@
 module P36Stats where
+import Control.Exception (IOException, catch)
 import Text.Printf (printf)
+
+-- TODO (wontfix) read numbers from a file -- you'd just xs <- readFile "lalala.txt"
+
+main :: IO ()
+main = do
+  xs <- promptXs "Enter space separated list of numbers to analyze (eg. 1 2 3 4): "
+  putStrLn $ "Average: " ++ show (avg xs)
+  putStrLn $ "Maximum: " ++ show (maximum xs)
+  putStrLn $ "Minimum: " ++ show (minimum xs)
+  putStrLn $ "Sample standard deviation (rounded): " ++ show (sd xs)
+  putStrLn $ "Sample standard deviation (unrounded): " ++ show (sampSD xs)
+  putStrLn $ "Population standard deviation (unrounded): " ++ show (popSD xs)
 
 -- Round sample SD to 2 decimal places
 sd :: [Double] -> Double
@@ -40,3 +53,14 @@ nMinus1Avg :: [Double] -> Double
 nMinus1Avg []  = 0
 nMinus1Avg [_] = 0
 nMinus1Avg xs  = sum xs / fromIntegral (length xs - 1)
+
+
+promptXs :: String -> IO [Double]
+promptXs m = do
+    putStr m
+    x <- getLine
+    return (map read $ words x) `catch` except
+  where
+    except e = do
+      putStrLn $ "Couldn't parse number. Error was: " ++ show (e::IOException)
+      promptXs m
