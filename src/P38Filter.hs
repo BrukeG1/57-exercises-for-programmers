@@ -16,7 +16,7 @@ filt p = foldr (\x xs -> if p x then x:xs else xs) []
 
 -- not used, but cool
 map' :: (a -> b) -> [a] -> [b]
-map' f = foldr (\x xs -> f x : xs) []
+map' f = foldr ((:) . f) []
 
 evn :: Int -> Bool
 evn n = n `mod` 2 == 0
