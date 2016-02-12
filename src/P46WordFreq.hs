@@ -2,34 +2,26 @@ module P46WordFreq where
 
 import qualified Data.Map as M
 import Data.Function(on)
-import Data.List(sortBy)
+import Data.List(sortBy,sort, group)
 import Text.Printf(printf)
-
+import Control.Arrow ((&&&))
 -- TODO: Test on shakespeare, bar chart, write in another language, tests
 
 file :: String
-file = "../../../barncamp-signing-annotated.txt"
+--file = "../../../barncamp-signing-annotated.txt"
+file = "shakespeare.txt"
 
 main :: IO ()
 main = do
     xs <- readFile file
-    putStrLn $ concatMap mkRow . countWds $ words xs
+    putStrLn $ concatMap mkRow . freqWds $ words xs
 
-wds :: [String]
-wds = [ "badger"
-      , "badger"
-      , "badger"
-      , "badger"
-      , "badger"
-      , "badger"
-      , "badger"
-      , "mushroom"
-      , "mushroom"
-      , "plinth"
-      ]
+freqWds :: Ord a => [a] -> [(a,Int)]
+freqWds =
+  sortBy (flip compare `on` snd) . map (head &&& length) . group . sort
 
-countWds :: [String] -> [(String,Int)]
-countWds ws =
+freqWds' :: [String] -> [(String,Int)]
+freqWds' ws =
     sortBy (flip compare `on` snd) . M.toList $
       foldr (\w m -> if M.member w m
                      then M.insert w ((M.!)m w + 1) m
