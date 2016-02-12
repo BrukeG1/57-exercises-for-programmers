@@ -1,5 +1,4 @@
 module P39Sort where
---- sortBy compare on?
 import Data.Map as M
 import Text.Printf(printf)
 import Data.Function (on)
@@ -76,3 +75,4 @@ promptN m = do
     except e = do
       putStrLn $ "Couldn't parse number. Error was: " ++ show (e::IOException)
       promptN m
+
