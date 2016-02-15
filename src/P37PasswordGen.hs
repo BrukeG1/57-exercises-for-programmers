@@ -2,8 +2,7 @@ module P37PasswordGen where
 
 import Control.Monad
 import Control.Exception
-import Data.Array.IO
-import System.Random
+import Library
 
 -- TODO: add pwd to clipboard; vowel replacement
 
@@ -29,22 +28,6 @@ mkPass l s n = do
 
 get :: Int -> [a] -> IO [a]
 get n = liftM (take n) . shuffle
-
--- Randomly shuffle a list
--- /O(N)/ from: https://wiki.haskell.org/Random_shuffle
-shuffle :: [a] -> IO [a]
-shuffle xs = do
-   ar <- nArray n xs
-   forM [1..n] $ \i -> do
-     j <- randomRIO (i,n)
-     vi <- readArray ar i
-     vj <- readArray ar j
-     writeArray ar j vi
-     return vj
-  where
-    n = length xs
-    nArray :: Int -> [a] -> IO (IOArray Int a)
-    nArray n' =  newListArray (1,n')
 
 chrs,nums,syms::String
 chrs  = "abcdefghijklmnopqrstuvwxyz"
