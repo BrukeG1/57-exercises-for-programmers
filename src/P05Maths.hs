@@ -6,7 +6,7 @@ main :: IO ()
 main = do
     in1 <- promptNonNegFloat "Number 1: "
     in2 <- promptNonNegFloat "Number 2: "
-    putStrLn $ calcPrint in1 in2
+    putStrLn $ calcPrint (show in1) (show in2)
 
 calcPrint :: String -> String -> String
 calcPrint in1 in2 =
