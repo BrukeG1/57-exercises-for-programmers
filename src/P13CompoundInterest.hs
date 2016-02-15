@@ -1,11 +1,14 @@
+module P13CompoundInterest where
+
 import Text.Printf (printf)
+import Library
 
 main :: IO ()
 main = do
-    principal <- promptN "Principal: "
-    rate      <- promptN "Rate of interest: "
-    years     <- promptN "Num years: "
-    numComp   <- promptN "Num times compounded/year: "
+    principal <- promptNonNegFloat "Principal: "
+    rate      <- promptNonNegFloat "Rate of interest: "
+    years     <- promptNonNegFloat "Num years: "
+    numComp   <- promptNonNegFloat "Num times compounded/year: "
     let interest = computeCompoundInterest principal rate years numComp
         total    = principal + interest
     putStrLn $ "After " ++ show years ++ " years at "
@@ -16,19 +19,8 @@ showD :: Float -> String
 showD = printf "%0.2f"
 
 computeCompoundInterest :: Float -> Float -> Float -> Float -> Float
-computeCompoundInterest p r y n = 
-    p * (1+(r/100.0)/n) ^ (round (n*y)::Int) - p
-
-promptN :: (Num a, Ord a, Read a) => String -> IO a
-promptN m = do
-    putStr m
-    x <- readLn -- could catch error here if we wanted to recover
-    if x<0
-      then do
-        putStrLn "Numbers must be non-negative"
-        promptN m
-      else
-        return x
+computeCompoundInterest p r y n =
+    read . showD $ p * (1+(r/100.0)/n) ^ (round (n*y)::Int) - p
 
 -- TODO: reverse program i.e. given a total and a rate show the required principal
 -- Make a GUI for it.
