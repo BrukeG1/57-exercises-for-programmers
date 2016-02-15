@@ -4,6 +4,8 @@ import Control.Monad (forM)
 import System.Random (randomRIO)
 import Data.Array.IO (writeArray, IOArray, readArray, newListArray)
 import System.IO (hFlush, stdout)
+import Data.Char (toUpper, toLower)
+import Text.Printf (printf)
 
 -- Randomly shuffle a list
 -- /O(N)/ from: https://wiki.haskell.org/Random_shuffle
@@ -20,6 +22,18 @@ shuffle xs = do
     n = length xs
     newArray :: Int -> [a] -> IO (IOArray Int a)
     newArray n' =  newListArray (1,n')
+
+uc :: String -> String
+uc = map toUpper
+
+lc :: String -> String
+lc = map toLower
+
+showD :: Float -> String
+showD = printf "%.2f"
+
+showD8 :: Float -> String
+showD8 = printf "%8.2f"
 
 -- Prompt for a string, with a message
 promptS :: String -> IO String
