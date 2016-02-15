@@ -1,6 +1,5 @@
 module P13CompoundInterest where
 
-import Text.Printf (printf)
 import Library
 
 main :: IO ()
@@ -14,9 +13,6 @@ main = do
     putStrLn $ "After " ++ show years ++ " years at "
                ++ showD rate ++ "%, the investment will be worth £"
                ++ showD total ++ ", a growth of £" ++ showD interest
-
-showD :: Float -> String
-showD = printf "%0.2f"
 
 computeCompoundInterest :: Float -> Float -> Float -> Float -> Float
 computeCompoundInterest p r y n =
