@@ -1,8 +1,12 @@
+module P10Checkout where
+
+import Library
 import Control.Monad
+import Text.Printf(printf)
 
 main :: IO ()
 main = do
-  n <- promptN "How many items: "
+  n <- promptNonNegInt "How many items: "
   items <- mapM getItem [1..n]
   mapM_ showItem items
   subtotal <- foldM totalize 0 items
@@ -13,11 +17,14 @@ main = do
 
 
 totalize :: Float -> (Int, Float, Int) -> IO Float
-totalize s (_,price,qty)=
-    return $ s + price * fromIntegral qty
+totalize s (_,price,qty) =
+    return . read $ printf "%0.2f" tot
+  where
+    tot = s + price * fromIntegral qty
 
 getTax :: Float -> IO Float
-getTax subtotal = return $ subtotal * 0.055
+getTax subtotal =
+    return $ subtotal * 0.055
 
 showItem :: (Int, Float, Int) -> IO ()
 showItem (i,price,qty) =
@@ -28,17 +35,6 @@ showItem (i,price,qty) =
 getItem :: Int -> IO (Int, Float, Int)
 getItem i = do
     putStrLn $ "Item " ++ show i
-    price <- promptN "Price: "
-    qty <- promptN "Qty: "
+    price <- promptNonNegFloat "Price: "
+    qty <- promptNonNegInt "Qty: "
     return (i,price,qty)
-
-promptN :: (Num a, Ord a, Read a) => String -> IO a
-promptN m = do
-    putStr m
-    x <- readLn -- could catch error here if we wanted to recover
-    if x<0
-      then do
-        putStrLn "Numbers must be non-negative"
-        promptN m
-      else
-        return x
