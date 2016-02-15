@@ -1,13 +1,16 @@
+module P06Retirement where
+
+import Library
 import Data.Time
 import System.Locale
 
-data RetireWhen = Now Int | Future Int | Past Int
+data RetireWhen = Now Int | Future Int | Past Int deriving (Show,Eq)
 
 main :: IO ()
 main = do
     year <- getYear
-    age <- promptI "How old are you now? "
-    ret <- promptI "Retirement age? "
+    age <- promptNonNegInt "How old are you now? "
+    ret <- promptNonNegInt "Retirement age? "
     case retireWhen age ret year of
       Past p   -> putStrLn $ "You can already retire, " ++ show p
                              ++ " was in the past"
@@ -30,14 +33,3 @@ retireWhen a r y =
   where
     retirementDelta = r - a
     retirementYear = y + retirementDelta
-
-promptI :: String -> IO Int
-promptI s = do
-    putStr s
-    x <- readLn :: IO Int -- could catch error here if we wanted to recover
-    if x<0
-      then do
-        putStrLn "Numbers must be non-negative"
-        promptI s
-      else
-        return x
