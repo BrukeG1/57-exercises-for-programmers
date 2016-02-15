@@ -4,8 +4,9 @@ import Text.Printf(printf)
 import Data.List(sortBy)
 import Data.List.Split(splitOn)
 import Data.Function(on)
-
--- TODO: Use a CSV parding library; testing
+import Data.Vector (toList)
+import Data.Csv
+import qualified Data.ByteString.Lazy.Char8 as B
 
 main :: IO ()
 main = do
@@ -15,6 +16,9 @@ main = do
     putStrLn "Salary sort\n"
     putStrLn tblHeader
     putStrLn $ mkSortTbl 2 theFile
+    putStrLn "Salary sort using Data.Csv\n"
+    putStrLn tblHeader
+    putStrLn $ mkSortTbl' 2 theFile
 
 tblHeader :: String
 tblHeader =
@@ -24,6 +28,10 @@ tblHeader =
 mkSortTbl :: Int -> [String] -> String
 mkSortTbl n xs =
       concatMap mkRow . sortBy (flip compare `on` (!!n)) $ map toFields xs
+
+mkSortTbl' :: Int -> [String] -> String
+mkSortTbl' n xs =
+      concatMap mkRow . sortBy (flip compare `on` (!!n)) $ toFieldRows xs
 
 mkTbl :: [String] -> String
 mkTbl =
@@ -39,6 +47,14 @@ mkRow fs =
 
 toFields :: String -> [String]
 toFields = splitOn ","
+
+toFieldRows :: [String] -> [[String]]
+toFieldRows xs = 
+    case xs' of
+      Left e -> error e
+      Right xs'' -> toList xs''
+  where
+    xs' = decode NoHeader . B.pack $ unlines xs
 
 fname :: [String] -> String
 fname = (!!1)

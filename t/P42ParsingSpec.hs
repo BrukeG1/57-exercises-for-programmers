@@ -27,3 +27,15 @@ spec = do
   describe "salary" $ do
     it "extracts 3rd field from a list" $ do
       salary ["a", "b", "c"] == "c"
+  describe "mkSortTbl" $ do
+    it "sorts correctly by salary and returns formatted results (head)" $ do
+      (head . lines $ mkSortTbl 2 testFile) == "Xiong    Fong     65000 "
+    it "sorts correctly by salary and returns formatted results (last)" $ do
+      (last . lines $ mkSortTbl 2 testFile) == "Swift    Geoffrey 14200 "
+    it "behaves the same as the Data.Csv implementation" $ do
+      (lines $ mkSortTbl 2 testFile) == (lines $ mkSortTbl' 2 testFile)
+  describe "mkSortTbl'" $ do
+    it "sorts correctly by salary and returns formatted results (head)" $ do
+      (head . lines $ mkSortTbl' 2 testFile) == "Xiong    Fong     65000 "
+    it "sorts correctly by salary and returns formatted results (last)" $ do
+      (last . lines $ mkSortTbl' 2 testFile) == "Swift    Geoffrey 14200 "
