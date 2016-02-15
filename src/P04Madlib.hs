@@ -1,7 +1,8 @@
-import System.Random
-import Data.Array.IO (writeArray, IOArray, readArray, newListArray)
+module P04Madlib where
+
 import Control.Monad
- 
+import Library
+
 main :: IO ()
 main = do
     n <- prompt "Noun: "
@@ -20,24 +21,9 @@ prompt s = do
     getLine
 
 stories :: String -> String -> String -> String -> [String]
-stories v n adj adv = 
+stories v n adj adv =
     [ "Do you " ++ v ++ " your " ++ adj ++ " " ++ n ++ " " ++ adv ++ "? That's hilarious!"
     , "Oh flip! Why do you " ++ v ++ " this " ++ adj ++ " " ++ n ++ "? Weirdo."
     , "How does " ++ v ++ " a " ++ adj ++ " " ++ n ++ " work?"
     ]
-
--- Randomly shuffle a list from https://wiki.haskell.org/Random_shuffle
-shuffle :: [a] -> IO [a]
-shuffle xs = do
-    ar <- newArray n xs
-    forM [1..n] $ \i -> do
-      j <- randomRIO (i,n)
-      vi <- readArray ar i
-      vj <- readArray ar j
-      writeArray ar j vi
-      return vj
-  where
-    n = length xs
-    newArray :: Int -> [a] -> IO (IOArray Int a)
-    newArray n' =  newListArray (1,n')
 
