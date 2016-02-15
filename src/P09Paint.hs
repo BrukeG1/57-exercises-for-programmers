@@ -30,8 +30,8 @@ tinsForLRoom :: IO ()
 tinsForLRoom = do
     w <- promptNonNegInt "How wide is your room? "
     l <- promptNonNegInt "And how long is it? "
-    il <- promptNonNegInt "What is the width of the sideways L-bit ? "
-    iw <- promptNonNegInt "And the width of the vertical L-bit? "
+    il <- promptNonNegInt "What is the width of the inner L-bit ? "
+    iw <- promptNonNegInt "And the length of the inner L-bit? "
     let top = tinsOfPaint $ elArea w l iw il
     putStrLn $ "You will need " ++ show top 
                 ++ " tins of paint for an L-shaped room of width " 
