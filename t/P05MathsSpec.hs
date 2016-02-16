@@ -18,8 +18,8 @@ spec = do
       x `plus` y `shouldBe` 129.0
     prop "has the property of commutativity" $
       \a b -> a `plus` b `shouldBe` b `plus` a
-    prop "has the property of associativity [up to 3 decimal places] (a+b)+c==a+(b+c) " $
-      \a b c -> ((a `plus` b) `plus` c) - (a `plus` (b `plus` c)) < 0.001
+    prop "has the property of associativity [up to 2 decimal places] (a+b)+c==a+(b+c) " $
+      \a b c -> ((a `plus` b) `plus` c) - (a `plus` (b `plus` c)) < 0.01
   describe "minus" $
     it "is the same as subtracting 1 floats from another and calling show on the result" $
       x `minus` y `shouldBe` 111.0
