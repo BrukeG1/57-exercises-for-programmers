@@ -3,7 +3,7 @@ module Library where
 import Control.Monad (forM)
 import System.Random (randomRIO)
 import Data.Array.IO (writeArray, IOArray, readArray, newListArray)
-import System.IO (hFlush, stdout)
+import System.IO (hSetEcho,stdin,hFlush, stdout)
 import Data.Char (toUpper, toLower)
 import Text.Printf (printf)
 
@@ -38,6 +38,17 @@ showD8 = printf "%8.2f"
 -- Prompt for a string, with a message
 promptS :: String -> IO String
 promptS m = putStr m >> hFlush stdout >> getLine
+
+-- Prompt for a password (dont echo input)
+promptP :: String -> IO String
+promptP m = do
+    putStr m
+    hFlush stdout
+    hSetEcho stdin False
+    pass <- getLine
+    hSetEcho stdin True
+    putStrLn ""
+    return pass
 
 -- Prompt for a non-negative float, with message
 -- Dies on no-parse
