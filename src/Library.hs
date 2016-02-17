@@ -50,32 +50,26 @@ promptP m = do
     putStrLn ""
     return pass
 
--- Prompt for a non-negative float, with message
--- Dies on no-parse
--- Numbers less than zero make it prompt again
-promptNonNegFloat :: String -> IO Float
-promptNonNegFloat m = do
+
+-- Prompt for a non-negative number, with message
+-- Dies on no parse
+-- Numbers < 0 make it prompt again
+promptNonNegNum :: (Num a, Ord a, Read a) => String -> IO a
+promptNonNegNum m = do
     putStr m
     hFlush stdout
-    x <- readLn :: IO Float
+    x <- readLn -- could catch error here if we wanted to recover
     if x<0
       then do
         putStrLn "Numbers must be non-negative"
-        promptNonNegFloat m
+        promptNonNegNum m
       else
         return x
 
+-- Prompt for a non-negative float, with message
+promptNonNegFloat :: String -> IO Float
+promptNonNegFloat = promptNonNegNum
+
 -- Prompt for a non-negative Int, with message
--- Dies on no-parse
--- Numbers less than zero make it prompt again
 promptNonNegInt :: String -> IO Int
-promptNonNegInt m = do
-    putStr m
-    hFlush stdout
-    x <- readLn :: IO Int
-    if x<0
-      then do
-        putStrLn "Numbers must be non-negative"
-        promptNonNegInt m
-      else
-        return x
+promptNonNegInt = promptNonNegNum
