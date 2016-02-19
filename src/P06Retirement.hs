@@ -2,7 +2,6 @@ module P06Retirement where
 
 import Library
 import Data.Time
-import System.Locale
 
 data RetireWhen = Now Int | Future Int | Past Int deriving (Show,Eq)
 

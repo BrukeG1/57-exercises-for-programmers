@@ -45,7 +45,6 @@ variance xs avgF =
 
 -- Calculate the mean
 avg :: [Double] -> Double
-avg [] = 0
 avg xs = sum xs / fromIntegral (length xs)
 
 -- Calculate the mean for n-1 elts

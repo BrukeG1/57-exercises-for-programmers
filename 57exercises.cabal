@@ -1,0 +1,71 @@
+name:                57exercises
+version:             0.1.0.0
+synopsis:            My solutions to the 57 exercises for programmers book
+description:         Please see README.md
+homepage:            http://github.com/githubuser/57ex#readme
+license:             GPL3
+license-file:        LICENSE
+author:              Charlie Harvey
+maintainer:          Charlie Harvey
+copyright:           2016 Charlie Harvey Here
+category:            Learning
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+  build-depends:       base >= 4.7 && < 5
+                      , containers
+                      , time
+                      , bytestring
+                      , cassava
+                      , http-conduit
+                      , text
+                      , vector
+                      , array
+                      , random
+                      , aeson
+                      , bcrypt
+                      , hspec
+                      , split
+                      , QuickCheck
+  default-language:    Haskell2010
+
+--executable 57exercises-exe
+--  hs-source-dirs:      app
+--  main-is:             Main.hs
+--  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+--  build-depends:       base
+--                     , 57exercises
+--  default-language:    Haskell2010
+
+test-suite 57exercises-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+                     , src
+  main-is:             Spec.hs
+  build-depends:       base
+                      , 57exercises
+                      , containers
+                      , time
+                      , bytestring
+                      , cassava
+                      , http-conduit
+                      , text
+                      , vector
+                      , array
+                      , statistics
+                      , random
+                      , aeson
+                      , bcrypt
+                      , hspec
+                      , split
+                      , QuickCheck
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+--source-repository head
+--  type:     git
+--  location: https://github.com/githubuser/57exercises

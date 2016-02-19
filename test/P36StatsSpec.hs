@@ -20,7 +20,7 @@ spec = do
     it "correctly returns the mean average of a list" $ do
       avg [1,2,3] `shouldBe` 2
     prop "is within 0.00000001 of mean from Statistics.Sample library (some rounding errors exist)" $
-      \xs -> avg xs - statMean xs <0.00000001
+      \xs -> (isNaN $ avg xs) || avg xs - statMean xs <0.00000001
   describe "sampSD" $ do
     prop "is within 0.0000000001 of stdDev from Statistics.Sample library (some rounding errors exist)" $
       \xs -> sampSD xs - stdDevSample xs <0.0000000001
