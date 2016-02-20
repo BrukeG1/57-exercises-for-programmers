@@ -50,6 +50,12 @@ promptP m = do
     putStrLn ""
     return pass
 
+-- Prompts for a number with message M
+-- dies on no parse
+promptNum :: (Num a, Ord a, Read a) => String -> IO a
+promptNum m = do
+    putStr m
+    readLn -- could catch error here if we wanted to recover
 
 -- Prompt for a non-negative number, with message
 -- Dies on no parse

@@ -1,11 +1,14 @@
+module P18TempConverter where
+
 import Data.Char (toUpper)
+import Library
 
 main :: IO ()
 main = do
     putStrLn "Temp converter options"
     putStrLn ""
     u <- promptS "What units is your temperature in (C,F,K): "
-    t <- promptN "What is the temperature?: "
+    t <- promptNum "What is the temperature?: "
     to   <- promptS "What unit do you want to convert to (C,F,K): "
     let temp = case u of
                     "C" -> Celsius t
@@ -18,22 +21,6 @@ main = do
                     "K" -> toKelvin temp
                     _   -> error "Bad target unit"
     putStrLn $ show temp ++ " converts to " ++ show result
-
-promptS :: String -> IO String
-promptS m = do
-    putStr m
-    s <- getLine
-    case map toUpper s of 
-      "K" -> return "K"
-      "C" -> return "C"
-      "F" -> return "F"
-      _   -> do putStrLn "Must be one of C,F,K"
-                promptS m
-
-promptN :: (Num a, Ord a, Read a) => String -> IO a
-promptN m = do
-    putStr m
-    readLn -- could catch error here if we wanted to recover
 
 data Temperature = Celsius Float | Farenheit Float | Kelvin Float
 
