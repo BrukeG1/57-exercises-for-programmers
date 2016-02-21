@@ -13,9 +13,9 @@ main = do
         _ -> inInput
     putStrLn $ formatBMI b
 
-data Height = Inches Double | FeetInches Double Double | Centimeters Double
-data Weight = Pounds Double | Kilograms Double
-data BMIband = Low | Healthy | High
+data Height = Inches Double | FeetInches Double Double | Centimeters Double deriving Eq
+data Weight = Pounds Double | Kilograms Double deriving Eq
+data BMIband = Low | Healthy | High deriving (Eq, Show)
 
 type BMI = Double
 
