@@ -1,9 +1,12 @@
+module P19BMI where
+
 import Text.Printf (printf)
+import Library
 -- TODO: Make a GUI
 
 main :: IO ()
 main = do
-    u <- promptN "Units 1. ft, in/lb; 2: in/lb; 3: kg,cm; default 2: " :: IO Integer
+    u <- promptNonNegNum "Units 1. ft, in/lb; 2: in/lb; 3: kg,cm; default 2: " :: IO Integer
     b <- case u of
         1 -> ftInInput
         3 -> cmInput
@@ -15,7 +18,6 @@ data Weight = Pounds Double | Kilograms Double
 data BMIband = Low | Healthy | High
 
 type BMI = Double
-
 
 toInches :: Height -> Height
 toInches (FeetInches f i) = Inches $ (f*12) + i
@@ -38,21 +40,21 @@ formatBMI b =
 
 inInput :: IO BMI
 inInput = do
-    h <- promptN "Height in inches: "
-    w <- promptN "Weight in lb: "
+    h <- promptNonNegNum "Height in inches: "
+    w <- promptNonNegNum "Weight in lb: "
     return $ bmi (Inches h) (Pounds w)
 
 ftInInput :: IO BMI
 ftInInput = do
-    f <- promptN "Height (feet part): "
-    i <- promptN "Height (inches part): "
-    w <- promptN "Weight in lb: "
+    f <- promptNonNegNum "Height (feet part): "
+    i <- promptNonNegNum "Height (inches part): "
+    w <- promptNonNegNum "Weight in lb: "
     return $ bmi (FeetInches f i) (Pounds w)
 
 cmInput :: IO BMI
 cmInput = do
-    h <- promptN "Height in cm: "
-    w <- promptN "Weight in kg: "
+    h <- promptNonNegNum "Height in cm: "
+    w <- promptNonNegNum "Weight in kg: "
     return $ bmi (Centimeters h) (Kilograms w)
 
 bmi :: Height -> Weight -> BMI
@@ -66,14 +68,3 @@ cmpBMI :: BMI -> BMIband
 cmpBMI b | b < 18.5  = Low
          | b > 25    = High
          | otherwise = Healthy
-
-promptN :: (Num a, Ord a, Read a) => String -> IO a
-promptN m = do
-    putStr m
-    x <- readLn -- could catch error here if we wanted to recover
-    if x<0
-      then do
-        putStrLn "Numbers must be non-negative"
-        promptN m
-      else
-        return x
