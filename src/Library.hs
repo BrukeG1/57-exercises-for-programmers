@@ -1,5 +1,6 @@
 module Library where
 -- reusable function used in more than one place
+import Control.Exception (catch, IOException)
 import Control.Monad (forM)
 import System.Random (randomRIO)
 import Data.Array.IO (writeArray, IOArray, readArray, newListArray)
@@ -51,26 +52,36 @@ promptP m = do
     return pass
 
 -- Prompts for a number with message M
--- dies on no parse
+-- Warns and restarts on no parse
 promptNum :: (Num a, Ord a, Read a) => String -> IO a
 promptNum m = do
     putStr m
-    readLn -- could catch error here if we wanted to recover
+    hFlush stdout
+    x <- readLn `catch` except
+    return x
+  where
+    except e = do
+      putStrLn $ "Couldn't parse number. Error was: " ++ show (e::IOException)
+      promptNum m
 
 -- Prompt for a non-negative number, with message
--- Dies on no parse
--- Numbers < 0 make it prompt again
+-- Warns and restarts on no parse
+-- Warns and restarts for numbers < 0
 promptNonNegNum :: (Num a, Ord a, Read a) => String -> IO a
 promptNonNegNum m = do
     putStr m
     hFlush stdout
-    x <- readLn -- could catch error here if we wanted to recover
+    x <- readLn `catch` except
     if x<0
       then do
         putStrLn "Numbers must be non-negative"
         promptNonNegNum m
       else
         return x
+  where
+    except e = do
+      putStrLn $ "Couldn't parse number. Error was: " ++ show (e::IOException)
+      promptNonNegNum m
 
 -- Prompt for a non-negative float, with message
 promptNonNegFloat :: String -> IO Float
