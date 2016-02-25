@@ -90,3 +90,12 @@ promptNonNegFloat = promptNonNegNum
 -- Prompt for a non-negative Int, with message
 promptNonNegInt :: String -> IO Int
 promptNonNegInt = promptNonNegNum
+
+promptMonth :: String -> IO Int
+promptMonth m = do
+  mon <- promptNum m
+  if mon < 1 || mon > 12
+    then do
+      putStrLn "Months are between 1 (Jan) and 12 (Dec)"
+      promptMonth m
+    else return mon
