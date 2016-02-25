@@ -1,11 +1,13 @@
+module P20StateTax where
+
 import Data.Map (fromList, (!), member, Map)
 import Data.Char (toLower)
 import Text.Printf
-import Control.Exception (catch, IOException)
+import Library
 
-main :: IO () 
+main :: IO ()
 main = do
-    amt <- promptN "What is the order amount? "
+    amt <- promptNonNegNum "What is the order amount? "
     putStr "What state are you in? "
     state <- getLine
     putStr "What county are you in? "
@@ -16,26 +18,6 @@ main = do
     let (taxMsg',total') = if taxAmt' == 0 then ("",amt) else (printf "Tax(alt):   %16.2f\n" taxAmt', amt+taxAmt')
     putStrLn $ taxMsg ++ printf "Total:      %16.2f" total
     putStrLn $ taxMsg' ++ printf "Total(alt): %16.2f" total'
-
--- Given a string, give back a lowercase version of it
-lc :: String -> String
-lc = map toLower
-
--- Prompt for a number. Make sure it is positive and valid.
-promptN :: (Num a, Ord a, Read a) => String -> IO a
-promptN m = do
-    putStr m
-    x <- readLn `catch` except
-    if x<0
-      then do
-        putStrLn "Numbers must be non-negative"
-        promptN m
-      else
-        return x
-  where
-    except e = do
-      putStrLn $ "Couldn't parse number. Error was: " ++ show (e::IOException)
-      promptN m
 
 -- Original implementation with pattern matching. Nicer.
 -- Given a state, county and amount pass back the correct tax amount
@@ -53,7 +35,7 @@ getTaxAmt state county amt =
      _                         -> 0
 
 -- Doing this with data structures is fugli, but it was one of the challenges
-data TaxLookup = Rate Double | Subregions (Map String TaxLookup)
+data TaxLookup = Rate Double | Subregions (Map String TaxLookup) deriving (Eq, Show)
 
 taxLookup :: TaxLookup
 taxLookup =
