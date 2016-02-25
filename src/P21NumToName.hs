@@ -1,9 +1,14 @@
+module P21NumToName where
+
+-- TODO: i18n prompt for language and then show months in that lang
+
 import Data.Map (fromList, (!), Map)
+import Library
 
 main :: IO ()
 main = do
   putStrLn "Month lookup"
-  m <- promptM "Enter month number (1..12): " 
+  m <- promptMonth "Enter month number (1..12): " 
   putStrLn $ getMonth m
   putStrLn $ getMonth' m
 
@@ -43,16 +48,3 @@ monthHash =
 
 getMonth' :: Int -> String
 getMonth' = (monthHash !)
-
-promptM :: String -> IO Int
-promptM m = do
-    putStr m
-    x <- readLn -- could catch error here if we wanted to recover
-    if x<1 || x>12
-      then do
-        putStrLn "Numbers must be between 1 and 12"
-        promptM m
-      else
-        return x
-
--- TODO: i18n prompt for language and then show months in that lang
