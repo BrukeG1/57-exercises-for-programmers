@@ -99,3 +99,24 @@ promptMonth m = do
       putStrLn "Months are between 1 (Jan) and 12 (Dec)"
       promptMonth m
     else return mon
+
+
+-- Take a message and a list of already seen entries
+-- and keep asking for numbers until you get one that
+-- is not in the list already.
+-- Show error and repeat on parse problem.
+promptUniq :: (Eq a, Read a) => String -> [a] -> IO a
+promptUniq m xs = do
+    putStr m
+    hFlush stdout
+    x <- readLn  `catch` except
+    if x `elem` xs
+      then do
+        putStrLn "Items must be unique"
+        promptUniq m xs
+      else
+        return x
+  where
+    except e = do
+      putStrLn $ "Couldn't parse input. Error was: " ++ show (e::IOException)
+      promptUniq m xs
