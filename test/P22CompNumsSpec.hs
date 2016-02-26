@@ -22,7 +22,7 @@ spec = do
       it "gives 4 as the max of [1,4]" $ do
         max' Nothing [1,4] `shouldBe` Just 4
     describe "maxInt" $ do
-      prop "has the property that maxInt of list is the same as Just (last $ sort list)" $
-        \xs -> not (null xs) ==>
-                maxInt xs `shouldBe` Just (last $ sort xs)
-
+      it "gives Nothing as the max of an empty list" $ do
+        maxInt emptyList `shouldBe` Nothing
+      prop "has the property that maxInt of a nonempty list is the same as Just the last element of that list sorted" $
+        \xs -> not (null xs) ==> maxInt xs `shouldBe` Just (last $ sort xs)
