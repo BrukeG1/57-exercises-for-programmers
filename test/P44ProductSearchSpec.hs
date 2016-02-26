@@ -17,4 +17,6 @@ spec = do
         findByName "Wid" `shouldReturn` [Product {name = "Widget", price = 25.0, quantity = 5}]
       it "returns the catalogue entry for a widget, with part of the name, case insensitively" $ do
         findByName "Wid" `shouldReturn` [Product {name = "Widget", price = 25.0, quantity = 5}]
+      it "returns an empty list for an unsuccessful search" $ do
+        findByName "jkdajdksadksajkd" `shouldReturn` []
 
