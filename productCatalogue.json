@@ -1,0 +1,6 @@
+{ "products": [
+  {"name": "Widget",      "price": 25.00, "quantity": 5},
+  {"name": "Doohdad",     "price": 5.00,  "quantity": 10},
+  {"name": "Thingyummy",  "price": 25.00, "quantity": 5},
+  {"name": "Plange",      "price": 2.44,  "quantity": 7}
+]}
