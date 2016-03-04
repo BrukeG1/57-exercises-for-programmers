@@ -16,7 +16,7 @@ The -a100 tells Spec to generate 1000 quickcheck cases for each case
 
 ### Compiling
 
-It doesn&#8217;t compile because I have been working exclusively in GHCI. I shall sort out the cabal file eventually. Maybe.
+It doesn&#8217;t compile because I have been working exclusively in GHCi. I shall sort out the cabal file eventually. Maybe.
 
 ### Deadline?
 
