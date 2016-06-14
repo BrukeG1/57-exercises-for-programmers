@@ -17,8 +17,10 @@ spec = do
       it "given a string, a word to replace and the word to replace it with, return a tuple of changed string and replacement count of 1 if the word is replaced once" $ do
         replace "cats" "dogs" "\"cats\" and dogs" `shouldBe` ("\"dogs\" and dogs",1)
       prop "has the property of never leaving the string to be removed in the target string" $
-        \xs ys -> (not (null xs || null ys)) ==> do
-          let zs = replace xs "" ys
-          xs `isInfixOf` fst zs `shouldBe` False
+        \xs ys ->
+          (not (null xs || null ys)) ==>
+            do
+              let zs = replace xs "" ys
+              xs `isInfixOf` fst zs `shouldBe` False
       prop "has the property that replacing a string with itself has no effect on the target string" $
         \xs ys -> fst (replace xs xs ys) == ys
