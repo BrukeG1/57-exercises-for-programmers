@@ -12,6 +12,6 @@ main :: IO ()
 main = hspec spec
 
 spec :: Spec
-spec = do
-    it "Won't be implemented" $ do
+spec =
+    it "Won't be implemented" $
       pendingWith "Due to RottenTomatoes being dicks about their API"
