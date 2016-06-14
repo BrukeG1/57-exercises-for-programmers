@@ -3,7 +3,7 @@ version:             0.1.0.0
 synopsis:            My solutions to the 57 exercises for programmers book
 description:         Please see README.md
 homepage:            http://github.com/githubuser/57ex#readme
-license:             GPL3
+license:             GPL-3
 license-file:        LICENSE
 author:              Charlie Harvey
 maintainer:          Charlie Harvey
