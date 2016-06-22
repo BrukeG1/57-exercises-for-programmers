@@ -45,6 +45,7 @@ library
                       , servant-client >= 0.5
                       , servant-docs   >= 0.5
                       , wai
+                      , wai-extra
                       , warp
                       , mtl
                       , transformers
@@ -96,6 +97,7 @@ test-suite 57exercises-test
                       , servant-client
                       , servant-docs
                       , wai
+                      , wai-extra
                       , warp
                       , mtl
                       , transformers
