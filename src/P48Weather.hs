@@ -46,13 +46,13 @@ main = do
              ++ " ("
              ++ (show . toCelsius $ getTemp w)
              ++ ")"
-    putStrLn $ "Weather description: " ++ (unpack $ getDescription w)
-    putStrLn $ "Wind direction is " ++ (show $ getWindDirection w)
-    putStrLn $ "Wind speed is " ++ (show $ getWindSpeed w) ++ " meter/sec"
-    putStrLn $ "Air pressure is " ++ (show $ getPressure w) ++ " hPa"
+    putStrLn $ "Weather description: " ++ unpack (getDescription w)
+    putStrLn $ "Wind direction is " ++ show (getWindDirection w)
+    putStrLn $ "Wind speed is " ++ show (getWindSpeed w) ++ " meter/sec"
+    putStrLn $ "Air pressure is " ++ show (getPressure w) ++ " hPa"
     putStrLn $ "Sun rises at " ++ getSunrise w
     putStrLn $ "Sun sets at " ++ getSunset w
-    putStrLn $ "Humidity is " ++ (show $ getHumidity w) ++ "%"
+    putStrLn $ "Humidity is " ++ show (getHumidity w) ++ "%"
 
 weatherForPlace :: String -> IO (Response ByteString)
 weatherForPlace place = get $ "http://api.openweathermap.org/data/2.5/weather?q="
@@ -94,7 +94,8 @@ getWindDirection :: AsValue b => Response b -> CompassDirection
 getWindDirection w =
     getItem w (key "wind" . key "deg" . _Number) (degToDirection . toRealFloat) "wind direction"
 
-degToDirection d | d >= 348.75 || d <=  11.25 = North
+degToDirection d | (d >= 348.75 && d <= 360)
+                   || d >= 0 && d <=  11.25 = North
                  | d >   11.25 && d <   33.75 = NorthNorthEast
                  | d >=  33.75 && d <=  56.25 = NorthEast
                  | d >   56.25 && d <   78.75 = EastNorthEast
@@ -110,7 +111,7 @@ degToDirection d | d >= 348.75 || d <=  11.25 = North
                  | d >  281.25 && d <  303.75 = WestNorthWest
                  | d >= 303.75 && d <= 326.25 = NorthWest
                  | d >  326.25 && d <  348.75 = NorthNorthWest
-                 | otherwise            = error $ "Bad wind direction: " ++ (show d)
+                 | otherwise            = error $ "Bad wind direction: " ++ show d
 
 getDescription :: AsValue b => Response b -> Text
 getDescription w =
