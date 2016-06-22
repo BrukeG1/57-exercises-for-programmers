@@ -24,15 +24,15 @@ spec :: Spec
 spec = do
     describe "weatherForPlace" $ do
       it "gets weather for the correct country" $ do
-        w' <-weatherForPlace "Oxford, UK"
+        w' <-weatherForPlace "Oxford UK"
         (w' ^. responseBody . key "sys" . key "country" . _String) `shouldBe` "GB"
     describe "weatherForPlace" $ do
       it "gets weather for the correct place name" $ do
-        w' <-weatherForPlace "Oxford, UK"
+        w' <-weatherForPlace "Oxford UK"
         (w' ^. responseBody . key "name" . _String) `shouldBe` "Oxford"
     describe "weatherForPlace" $ do
       it "gets weather for the correct id" $ do
-        w' <-weatherForPlace "Oxford, UK"
+        w' <-weatherForPlace "Oxford UK"
         (w' ^? responseBody . key "id". _Integer) `shouldBe` Just 2640729
     describe "getTemp" $ do
       it "gets some reasonably sensible temperature i.e. > 200K (which is cold for anywhere. Even London)." $ do
