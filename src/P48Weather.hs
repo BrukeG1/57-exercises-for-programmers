@@ -35,7 +35,7 @@ data CompassDirection = North
                       | WestNorthWest
                       | NorthWest
                       | NorthNorthWest
-                      deriving Show
+                      deriving (Show, Eq)
 
 main :: IO ()
 main = do
@@ -94,6 +94,7 @@ getWindDirection :: AsValue b => Response b -> CompassDirection
 getWindDirection w =
     getItem w (key "wind" . key "deg" . _Number) (degToDirection . toRealFloat) "wind direction"
 
+degToDirection :: Float -> CompassDirection
 degToDirection d | (d >= 348.75 && d <= 360)
                    || d >= 0 && d <=  11.25 = North
                  | d >   11.25 && d <   33.75 = NorthNorthEast
