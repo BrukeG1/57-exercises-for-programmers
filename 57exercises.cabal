@@ -48,6 +48,9 @@ library
                       , wai-extra
                       , warp
                       , mtl
+                      , persistent
+                      , persistent-sqlite
+                      , persistent-template
                       , transformers
                       , http-client
                       , http-client-tls
@@ -93,6 +96,9 @@ executable 57exercises-exe
                      , wai-extra
                      , warp
                      , mtl
+                     , persistent
+                     , persistent-sqlite
+                     , persistent-template
                      , transformers
                      , http-client
                      , http-client-tls
@@ -138,6 +144,9 @@ test-suite 57exercises-test
                      , wai-extra
                      , warp
                      , mtl
+                     , persistent
+                     , persistent-sqlite
+                     , persistent-template
                      , transformers
                      , http-client
                      , http-client-tls
