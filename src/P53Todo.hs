@@ -1,7 +1,7 @@
 {-# LANGUAGE DataKinds                  #-}
 {-# LANGUAGE DeriveGeneric              #-}
-{-# LANGUAGE FlexibleInstances          #-}
 {-# LANGUAGE FlexibleContexts           #-}
+{-# LANGUAGE FlexibleInstances          #-}
 {-# LANGUAGE GADTs                      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
@@ -55,23 +55,22 @@ type TodoAPI =
          "todo" :> Get '[JSON] [Todo]
     :<|> "todo" :> ReqBody '[JSON] Todo   :> Put '[JSON] (Key Todo)
     :<|> "todo" :> Capture "id" DbKey     :> Get '[JSON] (Maybe Todo)
-    :<|> "todo" :> Capture "id" DbKey     :> DeleteNoContent '[JSON] ()
     :<|> "todo" :> ReqBody '[JSON] (DbKey, Todo)
                                           :> PostNoContent '[JSON] ()
+    :<|> "todo" :> Capture "id" DbKey     :> DeleteNoContent '[JSON] ()
 
 -- main: run our server
 main :: IO ()
 main = run 8081 app
 
 -- API server implementation
--- CRUD functionality is in the database section below
 todoServer :: Server TodoAPI
 todoServer =
        liftIO listTodos
   :<|> liftIO . createTodo
   :<|> liftIO . retrieveTodo
-  :<|> liftIO . deleteTodo
   :<|> liftIO . updateTodo
+  :<|> liftIO . deleteTodo
 
 app :: Application
 app = serve todoAPI todoServer
@@ -80,12 +79,6 @@ todoAPI :: Proxy TodoAPI
 todoAPI = Proxy
 
 -- API documentation
---
---   task     Text
---   priority Int
---   start    UTCTime
---   due      UTCTime
---   created  UTCTime default=CURRENT_TIME
 instance ToSample Todo where
   toSamples _ =
     singleSample
@@ -95,11 +88,14 @@ instance ToSample Todo where
             (read "2016-11-01 11:11:11"::UTCTime)
             (read "2016-11-01 11:11:11"::UTCTime)
       )
+
 instance ToSample DbKey where
-  toSamples _ = singleSample $ toBackendKey (toSqlKey 4::TodoId)
+  toSamples _ =
+    singleSample $ toBackendKey (toSqlKey 4::TodoId)
 
 instance ToSample (Key Todo) where
-  toSamples _ = singleSample (toSqlKey 4::TodoId)
+  toSamples _ =
+    singleSample (toSqlKey 4::TodoId)
 
 instance ToCapture (Capture "id" DbKey) where
   toCapture _ =
@@ -112,25 +108,49 @@ apiDocs = docs todoAPI
 documentation :: String
 documentation = markdown apiDocs
 
+-- API commandline client
+baseUrl :: BaseUrl
+baseUrl = BaseUrl Http "localhost" 8081 ""
+
+manager :: IO C.Manager
+manager = C.newManager C.defaultManagerSettings
+
+clientList :: C.Manager -> BaseUrl -> ClientM [Todo]
+clientCreate :: Todo -> C.Manager -> BaseUrl -> ClientM (Key Todo)
+clientRetrieve :: DbKey -> C.Manager -> BaseUrl -> ClientM (Maybe Todo)
+clientUpdate :: (DbKey,Todo) -> C.Manager -> BaseUrl -> ClientM ()
+clientDelete :: DbKey -> C.Manager -> BaseUrl -> ClientM ()
+clientList :<|> clientCreate
+           :<|> clientRetrieve
+           :<|> clientUpdate
+           :<|> clientDelete = client todoAPI
+
+clientEg :: IO ()
+clientEg = do
+  m <- manager
+  res <- runExceptT (clientList m baseUrl) -- or clientRetrieve, etc
+  case res of
+    Left x   -> putStrLn $ "Error: " ++ show x
+    Right ns -> mapM_ print ns
+
 -- Database interactions (CRUD, list, migrate), also used by API implementation
 createTodo :: Todo -> IO (Key Todo)
-createTodo t = runSqlite db $ insert t
+createTodo t =
+    runSqlite db $ insert t
 
 retrieveTodo :: DbKey -> IO (Maybe Todo)
 retrieveTodo key =
     runSqlite db $ get (TodoKey key)
 
 updateTodo :: (DbKey, Todo) -> IO ()
-updateTodo (key, t) = do
-    _ <- runSqlite db $ update (TodoKey key) us
-    return ()
+updateTodo (key, t) =
+    runSqlite db $ update (TodoKey key) us
   where
     us = [TodoTask =. todoTask t]
 
 deleteTodo :: DbKey -> IO ()
-deleteTodo key = do
-    _ <- runSqlite db $ delete (TodoKey key)
-    return ()
+deleteTodo key =
+    runSqlite db $ delete (TodoKey key)
 
 listTodos :: IO [Todo]
 listTodos = do
